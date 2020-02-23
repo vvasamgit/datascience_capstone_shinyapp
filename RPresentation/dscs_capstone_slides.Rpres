@@ -41,8 +41,69 @@ Next Prediction Model Algorithm -Kneser-Ney Smoothing
 * Probability of next word using previous word(Markov) and Normalized Maximum Likelihood Estimation : $$P(w_n/w_{1}^{n-1})=P(w_n/w_{n-1})=C(w_{n-1}w_n)/C(w_{n-1})$$
 * Interploated Kneser-Ney smoothing :$$P_{KN}(w_i/w_{i-1}=max(c(w_{i-1}w_i)-d,0)/c(w_{i-1})+\lambda(w_{i-1})P_{continuation}(w_i))$$
 
-  $$\lambda(w_{i-1})=d/c(w_{i-1}) | {w:c(w_{i-1,w}) >0 }| , d=0.75$$
+  $$\lambda(w_{i-1})=d/c(w_{i-1}) | {w:c(w_{i-1,w}) >0 }| , d=0.75$$ where $$c(w_{i-1})$$ is previous word count in prev n-gram and $$c(w_{i-1,w})$$ prev word count in current n-gram.
+
+```{r echo=FALSE,eval=TRUE,warning=FALSE,message=FALSE,comment=NA,cache=TRUE}
+
+source("DsCsCommon.R")
+
+
+readNextWordModelFinalFile<-function(pNgram){
   
+  nwmFinalFilePattern<-paste0(nwmFinalFilePrefix,pNgram, "_(.)*.rds")
+  
+  nwmFinalFile<-list.files(nwmDirHome,pattern=nwmFinalFilePattern)
+  
+  nwmFinal<-readRDS(paste0(nwmDirHome,.Platform$file.sep,nwmFinalFile[1]))
+  
+  return (nwmFinal)
+}
+
+
+uniGramDT<-readNextWordModelFinalFile("1")
+
+biGramDT<-readNextWordModelFinalFile("2")
+
+setnames(biGramDT,old="prevcount", new="prevGramPrevWcount")
+
+
+
+triGramDT<-readNextWordModelFinalFile("3")
+
+setnames(triGramDT,old="prevcount", new="prevGramPrevWcount")
+
+
+```
+
+Final Model Features
+========================================================
+
+- BiGram model features   
+  
+```{r echo=FALSE,eval=TRUE,warning=FALSE,message=FALSE,comment=NA,cache=TRUE}
+
+head(biGramDT,2)
+
+```
+
+- TriGram model features  
+
+```{r echo=FALSE,eval=TRUE,warning=FALSE,message=FALSE,comment=NA,cache=TRUE}
+
+head(triGramDT,2)
+
+```
+
+Find Next Word Algorithm using  Final Model Features
+========================================================
+
+- Back off Algorithm using Trigram, Bigram Kneser-Ney probability and Unigram probability 
+  + Get last two input words and check in Trigram for the match, if there is a match return matched words
+  + if there is no match in Trigram check Bigram. if there is a match return matched words
+  + if there is no match in Bigram check Unigram. if there is a match return matched words
+  + if there is no match in Unigram return sample unigrams with highest probability
+
+
 Application Usage Instructions
 ========================================================
 
@@ -57,20 +118,15 @@ References
 
 1. Text mining infrastructure in R
    https://www.jstatsoft.org/article/view/v025i05
-
 2. CRAN Task View: Natural Language Processing
         https://cran.r-project.org/web/views/NaturalLanguageProcessing.html
-        
 3.Speech and Language Processing (3rd ed. draft)
   https://web.stanford.edu/~jurafsky/slp3/
   N-GRAMS
     https://web.stanford.edu/~jurafsky/slp3/3.pdf
-    
 4. Data Science Specialization Community Mentor Content Repository
   https://github.com/lgreski/datasciencectacontent
-  
 5. The Elements of Statistical Learning
 https://web.stanford.edu/~hastie/ElemStatLearn/
-
 6. Quanteda: Quantitative Analysis of Textual Data
 https://quanteda.io/

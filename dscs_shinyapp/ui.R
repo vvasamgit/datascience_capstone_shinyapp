@@ -31,7 +31,7 @@ shinyUI(fluidPage(
                            tags$div(id = 'placeholder',style = "margin-right: 1px;") 
                            )
                   ,
-                  tabPanel("Usage Guide", includeCSS("Mileage.html"))
+                  tabPanel("Usage Guide", includeCSS("dscs-usage.html"))
       )
     )
 ))

@@ -25,6 +25,9 @@ biGramDT<-readNextWordModelFinalFile("2")
 
 triGramDT<-readNextWordModelFinalFile("3")
 
+#setnames(triGramDT,old="prevcount", new="prevGramPrevWcount")
+
+head(triGramDT,5)
 
 uniGrams <- function(n = 5) {  
   return(sample(uniGramDT[, word1], size = n))

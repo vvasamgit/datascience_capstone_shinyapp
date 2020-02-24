@@ -1,8 +1,10 @@
 Data Science Capstone Next Word Prediction Application
 ========================================================
 author: Venkata Vasam 
-date: 
+date: February 23, 2020 
 autosize: true
+
+Use arrow keys on key board to see next or previous slide.
 
 Exploratory Data Analysis
 ========================================================
@@ -53,9 +55,9 @@ Final Model Features
 1: 0.0003604186 0.01302735
 ```
 
- prevGramPrevWcount is $$c(w_{i-1}): previous word (n-1) count in prev n-gram$$
+ prevGramPrevWcount is previous word count in prev n-gram : $$c(w_{i-1})$$ 
  
- prevWcount is $$c(w_{i-1,w}) : previous(n-1) word count in current n-gram $$
+ prevWcount is previous word count in current n-gram : $$c(w_{i-1,w})$$
 
 Find Next Word Algorithm using Final Model Features
 ========================================================
